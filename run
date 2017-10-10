@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source /etc/ocf-metabase/config.env
+
+./app/run_metabase.sh
