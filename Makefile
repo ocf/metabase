@@ -15,4 +15,4 @@ cook-image:
 
 .PHONY: push-image
 push-image:
-docker push $(DOCKER_TAG)
+	docker push $(DOCKER_TAG)

@@ -1,5 +1,6 @@
 #!/bin/bash
+set -euo pipefail
 
 source /etc/ocf-metabase/config.env
 
-./app/run_metabase.sh
+exec ./app/run_metabase.sh
