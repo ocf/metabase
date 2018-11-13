@@ -1,5 +1,4 @@
 servicePipeline(
-    upstreamProjects: ['dockers/master'],
     deployTargets: ['metabase'],
 )
 
