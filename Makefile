@@ -2,7 +2,7 @@ DOCKER_REVISION ?= metabase-testing-$(USER)
 DOCKER_TAG = docker-push.ocf.berkeley.edu/metabase:$(DOCKER_REVISION)
 RANDOM_PORT := $(shell expr $$(( 8000 + (`id -u` % 1000) + 2 )))
 
-MB_VERSION := v0.30.4
+MB_VERSION := v0.31.2
 
 .PHONY: dev
 dev: cook-image
