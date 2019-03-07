@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service
+spec:
+  selector:
+    app: metabase
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  labels:
+    app: metabase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metabase
+  template:
+    metadata:
+      labels:
+        app: metabase
+    spec:
+      containers:
+        - name: metabase
+          image: "docker.ocf.berkeley.edu/metabase:<%= version %>"
+          resources:
+            limits:
+              memory: 2048Mi
+              cpu: 750m
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - mountPath: /etc/secrets
+              name: secrets
+
+      volumes:
+        - name: secrets
+          hostPath:
+            path: /opt/share/kubernetes/secrets/metabase
+            type: Directory
+
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        searches:
+          - ocf.berkeley.edu
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: virtual-host-ingress
+spec:
+  rules:
+    - host: metabase.dev-kubernetes.ocf.berkeley.edu
+      http:
+        paths:
+          - backend:
+              serviceName: service
+              servicePort: 80
