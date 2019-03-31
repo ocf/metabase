@@ -1,0 +1,52 @@
+diff --git a/src/metabase/integrations/ldap.clj b/src/metabase/integrations/ldap.clj
+index 89453b484..2d69b4853 100644
+--- a/src/metabase/integrations/ldap.clj
++++ b/src/metabase/integrations/ldap.clj
+@@ -174,28 +174,25 @@
+   ([username]
+     (with-connection find-user username))
+   ([conn username]
+-    (let [fname-attr (keyword (ldap-attribute-firstname))
+-          lname-attr (keyword (ldap-attribute-lastname))
+-          email-attr (keyword (ldap-attribute-email))]
+-      (when-let [[result] (ldap/search conn (ldap-user-base) {:scope      :sub
+-                                                              :filter     (str/replace (ldap-user-filter) filter-placeholder (escape-value username))
+-                                                              :attributes [:dn :distinguishedName fname-attr lname-attr email-attr :memberOf]
+-                                                              :size-limit 1})]
+-        (let [dn    (or (:dn result) (:distinguishedName result))
+-              fname (get result fname-attr)
+-              lname (get result lname-attr)
+-              email (get result email-attr)]
+-          ;; Make sure we got everything as these are all required for new accounts
+-          (when-not (or (empty? dn) (empty? fname) (empty? lname) (empty? email))
+-            ;; ActiveDirectory (and others?) will supply a `memberOf` overlay attribute for groups
+-            ;; Otherwise we have to make the inverse query to get them
+-            (let [groups (when (ldap-group-sync)
+-                           (or (:memberOf result) (get-user-groups dn) []))]
+-              {:dn         dn
+-               :first-name fname
+-               :last-name  lname
+-               :email      email
+-               :groups     groups})))))))
++    (when-let [[result] (ldap/search conn (ldap-user-base) {:scope      :sub
++                                                            :filter     (str/replace (ldap-user-filter) filter-placeholder (escape-value username))
++                                                            :attributes [:dn :cn]
++                                                            :size-limit 1})]
++      (let [dn    (:dn result)
++            fname (first (str/split (:cn result) #" " 2))
++            lname (second (str/split (:cn result) #" " 2))
++            email (str username "@ocf.berkeley.edu")]
++        ;; Make sure we got everything as these are all required for new accounts
++        (when-not (or (empty? dn) (empty? fname) (empty? lname) (empty? email))
++          ;; ActiveDirectory (and others?) will supply a `memberOf` overlay attribute for groups
++          ;; Otherwise we have to make the inverse query to get them
++          (let [groups (when (ldap-group-sync)
++                         (or (:memberOf result) (get-user-groups dn) []))]
++            {:dn         dn
++             :first-name fname
++             :last-name  lname
++             :email      email
++             :groups     groups}))))))
+
+ (defn verify-password
+   "Verifies if the supplied password is valid for the `user-info` (from `find-user`) or DN."

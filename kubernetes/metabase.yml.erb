@@ -34,20 +34,6 @@ spec:
               cpu: 750m
           ports:
             - containerPort: 3000
-          volumeMounts:
-            - mountPath: /etc/ocf-metabase
-              name: secrets
-
-      volumes:
-        - name: secrets
-          hostPath:
-            path: /opt/share/docker/secrets/metabase
-            type: Directory
-
-      dnsPolicy: ClusterFirst
-      dnsConfig:
-        searches:
-          - ocf.berkeley.edu
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -55,7 +41,7 @@ metadata:
   name: virtual-host-ingress
 spec:
   rules:
-    - host: metabase.dev-kubernetes.ocf.berkeley.edu
+    - host: metabase.ocf.berkeley.edu
       http:
         paths:
           - backend:
