@@ -28,6 +28,9 @@ spec:
       containers:
         - name: metabase
           image: "docker.ocf.berkeley.edu/metabase:<%= version %>"
+          envFrom:
+            - secretRef:
+                name: metabase-secret
           resources:
             limits:
               memory: 2048Mi
