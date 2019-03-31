@@ -35,13 +35,13 @@ spec:
           ports:
             - containerPort: 3000
           volumeMounts:
-            - mountPath: /etc/secrets
+            - mountPath: /etc/ocf-metabase
               name: secrets
 
       volumes:
         - name: secrets
           hostPath:
-            path: /opt/share/kubernetes/secrets/metabase
+            path: /opt/share/docker/secrets/metabase
             type: Directory
 
       dnsPolicy: ClusterFirst
