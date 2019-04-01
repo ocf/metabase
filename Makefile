@@ -7,7 +7,7 @@ MB_VERSION := v0.31.2
 .PHONY: dev
 dev: cook-image
 	@echo "Will be accessible at http://$(shell hostname -f ):$(RANDOM_PORT)/"
-	docker run --rm -p "$(RANDOM_PORT):3000" -v ${PWD}/config.env:/etc/ocf-metabase/config.env "$(DOCKER_TAG)"
+	docker run --rm -p "$(RANDOM_PORT):3000" --env-file ${PWD}/config.env "$(DOCKER_TAG)"
 
 .PHONY: cook-image
 cook-image:
