@@ -26,7 +26,7 @@ ADD https://raw.github.com/technomancy/leiningen/stable/bin/lein /usr/local/bin/
 RUN chmod 744 /usr/local/bin/lein
 RUN lein upgrade
 
-RUN git clone --branch ${metabase_version} https://github.com/metabase/metabase .
+RUN git clone --depth 1 --branch ${metabase_version} https://github.com/metabase/metabase .
 ADD patches/ldap.patch .
 RUN git apply ldap.patch
 
