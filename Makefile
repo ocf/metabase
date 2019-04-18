@@ -11,7 +11,10 @@ dev: cook-image
 
 .PHONY: cook-image
 cook-image:
-	docker build --build-arg metabase_version=$(MB_VERSION) --pull -t $(DOCKER_TAG) .
+	git clone https://github.com/metabase/metabase --depth 1 -b $(MB_VERSION) src
+	cd src; git apply ../patches/*; \
+	docker build --pull -t $(DOCKER_TAG) .
+	rm -rf src
 
 .PHONY: push-image
 push-image:
