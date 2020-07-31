@@ -1,6 +1,6 @@
 # OCF Metabase
 
-[![Build Status](https://jenkins.ocf.berkeley.edu/buildStatus/icon?job=ocf/metabase/master)](https://jenkins.ocf.berkeley.edu/job/ocf/job/metabasejob/master/)
+[![Build Status](https://jenkins.ocf.berkeley.edu/buildStatus/icon?job=ocf/metabase/master)](https://jenkins.ocf.berkeley.edu/job/ocf/job/metabase/job/master)
 
 OCF Metabase docker/marathon configuration.
 
